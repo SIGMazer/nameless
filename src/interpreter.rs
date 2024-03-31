@@ -1,4 +1,3 @@
-
 use std::fs::File;
 use std::io::{BufReader, Read, Write};
 
@@ -25,7 +24,6 @@ impl Interpreter {
         if self.had_error {
             std::process::exit(65);
         }
-
     }
 
     pub fn run_prompt(&mut self) {
@@ -33,9 +31,11 @@ impl Interpreter {
             print!("> ");
             let _ = std::io::stdout().flush();
             let mut line = String::new();
-            std::io::stdin().read_line(&mut line).expect("Failed to read line");
+            std::io::stdin()
+                .read_line(&mut line)
+                .expect("Failed to read line");
             // break if line is EOF
-            if line == "exit\n"{
+            if line == "exit\n" {
                 break;
             }
             self.run(line);

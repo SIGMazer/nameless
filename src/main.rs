@@ -1,12 +1,9 @@
-
-mod token;
-mod scanner;
 mod interpreter;
+mod scanner;
+mod token;
 
-use std::env::args;
 use interpreter::Interpreter;
-
-
+use std::env::args;
 
 fn main() {
     let args: Vec<String> = args().collect();
@@ -15,9 +12,9 @@ fn main() {
     if args.len() < 1 {
         println!("Usage: {} [script]", args[0]);
         std::process::exit(64);
-    }else if args.len() == 1 {
+    } else if args.len() == 1 {
         interpreter.run_prompt();
-    }else {
+    } else {
         interpreter.run_file(&args[1]);
     }
 }
