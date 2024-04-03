@@ -1,16 +1,22 @@
 #include "chunk.h"
 
 
+void initChunk(Chunk *chunk){
+    chunk->count = 0;
+    chunk->capacity = 0;
+    chunk->items = NULL;
+    chunk->lines = NULL;
+    initValueArray(&chunk->constants);
+}
+
 void writeChunk(Chunk *chunk, uint8_t byte, size_t line){
-    if(chunk->count == chunk->capacity){
-        chunk->capacity = chunk->capacity < 8 ? 8 : chunk->capacity * 2;
-        chunk->items = realloc(chunk->items, chunk->capacity); 
-        chunk->lines = realloc(chunk->lines, chunk->capacity * sizeof(int));
-        if(chunk->items == NULL){
-            fprintf(stderr, "Memory allocation failed\n");
-            exit(EXIT_FAILURE);
-        }
+
+    if(chunk->capacity < chunk->count + 1){
+        chunk->capacity =chunk->capacity < 8 ? 8 : chunk->capacity * 2; 
+        chunk->items = realloc(chunk->items, chunk->capacity * sizeof(uint8_t)); 
+        chunk->lines = realloc(chunk->lines, chunk->capacity * sizeof(size_t)); 
     }
+
     chunk->items[chunk->count] = byte;
     chunk->lines[chunk->count] = line;
     chunk->count++;
