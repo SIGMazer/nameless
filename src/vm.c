@@ -1,4 +1,5 @@
 #include "vm.h"
+#include "chunk.h"
 #include "compiler.h"
 #include "debug.h"
 
@@ -101,7 +102,18 @@ Value pop()
 
 InterpretResult interpret(const char *source)
 {
-    compile(source);
-    return INTERPRET_OK;
+    Chunk chunk;
+    initChunk(&chunk);
+
+    if (!compile(source, &chunk)){
+        freeChunk(&chunk);
+        return INTERPRET_COMPILE_ERROR;
+    }
+
+    vm.chunk = &chunk;
+    vm.ip = vm.chunk->items;
+    InterpretResult result = run();
+    freeChunk(&chunk);
+    return result;
 }
 
